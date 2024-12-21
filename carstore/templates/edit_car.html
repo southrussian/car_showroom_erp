@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изменить данные автомобиля</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", sans-serif;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 600px;
+        }
+        .form-control {
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+        .btn {
+            border-radius: 15px;
+            padding: 12px 25px;
+            background-color: #007aff;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #0061d5;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .card-header {
+            background-color: #f0f0f5;
+            border-radius: 15px 15px 0 0;
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            Изменить данные автомобиля
+        </div>
+        <div class="card-body">
+            <!-- Выводим сообщения об успехе или ошибке -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="list-unstyled">
+                        {% for category, message in messages %}
+                            <li class="alert alert-{{ category }}">
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="make" class="form-label">Марка</label>
+                    <input type="text" class="form-control" id="make" name="make" required value="{{ car.make }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="model" class="form-label">Модель</label>
+                    <input type="text" class="form-control" id="model" name="model" value="{{ car.model }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="year" class="form-label">Год</label>
+                    <input type="text" class="form-control" id="year" name="year" required value="{{ car.year }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="vin" class="form-label">VIN</label>
+                    <input type="text" class="form-control" id="vin" name="vin" required value="{{ car.vin }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="color" class="form-label">Цвет</label>
+                    <input type="text" class="form-control" id="color" name="color" required value="{{ car.color }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Цена</label>
+                    <input type="text" class="form-control" id="price" name="price" required value="{{ car.price }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="mileage" class="form-label">Пробег</label>
+                    <input type="text" class="form-control" id="mileage" name="mileage" required value="{{ car.mileage }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label">Статус</label>
+                    <input type="text" class="form-control" id="status" name="status" required value="{{ car.status }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="fuel_type" class="form-label">Тип топлива</label>
+                    <input type="text" class="form-control" id="fuel_type" name="fuel_type" required value="{{ car.fuel_type }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="transmission" class="form-label">Трансмиссия</label>
+                    <input type="text" class="form-control" id="transmission" name="transmission" required value="{{ car.transmission }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="body_type" class="form-label">Тип кузова</label>
+                    <input type="text" class="form-control" id="body_type" name="body_type" required value="{{ car.body_type }}">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Сохранить изменения</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

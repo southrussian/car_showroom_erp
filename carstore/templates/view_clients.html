@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Данные клиентов</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", sans-serif;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 1200px;
+        }
+        .table {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            border-radius: 15px;
+            padding: 10px 20px;
+            background-color: #007aff;
+            border: none;
+            color: #fff;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #0061d5;
+        }
+        .action-btn {
+            border: none;
+            background: none;
+            color: #007aff;
+            font-size: 1.2rem;
+            padding: 0;
+            margin: 0;
+        }
+        .action-btn:hover {
+            color: #0061d5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">Список данных клиентов</h1>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary mb-3">Назад на панель управления</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Номер телефона</th>
+                <th>Эл. почта</th>
+              <th>Адрес</th>
+              <th>Дата рождения</th>
+              <th>Пол</th>
+              <th>Предпочтительный способ контакта</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td>{{ client.client_id }}</td>
+                <td>{{ client.first_name }}</td>
+                <td>{{ client.last_name }}</td>
+              <td>{{ client.phone_number }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.address }}</td>
+              <td>{{ client.date_of_birth }}</td>
+              <td>{{ client.gender }}</td>
+              <td>{{ client.preferred_contact_method }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
