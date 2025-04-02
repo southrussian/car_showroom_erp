@@ -5,6 +5,7 @@ from suppliers import suppliers_routes
 from service_records import service_records_routes
 from maintenance_schedules import maintenance_schedules_routes
 from inventory import inventory_routes
+from employees import employees_routes
 
 
 def register_routes(app):
@@ -15,3 +16,4 @@ def register_routes(app):
     service_records_routes(app)
     maintenance_schedules_routes(app)
     inventory_routes(app)
+    employees_routes(app)

@@ -1,16 +1,19 @@
 from models import *
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_employees(app):
+def employees_routes(app):
     @app.route('/view_employees')
     def view_employees():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         employees = Employee.query.all()
         return render_template('view_employees.html', employees=employees)
 
-def add_employee(app):
     @app.route('/add_employee', methods=['GET', 'POST'])
     def add_employee():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             user_id = request.form['user_id']
             first_name = request.form['first_name']
@@ -35,9 +38,10 @@ def add_employee(app):
 
         return render_template('add_employee.html')
 
-def edit_employee(app):
     @app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
     def edit_employee(employee_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         employee = Employee.query.get_or_404(employee_id)
 
         if request.method == 'POST':
@@ -60,9 +64,10 @@ def edit_employee(app):
 
         return render_template('edit_employee.html', employee=employee)
 
-def delete_employee(app):
     @app.route('/delete_employee/<int:employee_id>', methods=['POST'])
     def delete_employee(employee_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         employee = Employee.query.get_or_404(employee_id)
         try:
             db.session.delete(employee)
