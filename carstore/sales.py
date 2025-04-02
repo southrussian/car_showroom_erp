@@ -1,17 +1,19 @@
 from models import *
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_sales(app):
+def sales_routes(app):
     @app.route('/view_sales')
     def view_sales():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         sales = Sale.query.all()
         return render_template('view_sales.html', sales=sales)
 
-
-def add_sale(app):
     @app.route('/add_sale', methods=['GET', 'POST'])
     def add_sale():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             client_id = request.form['client_id']
             car_id = request.form['car_id']
@@ -36,10 +38,10 @@ def add_sale(app):
 
         return render_template('add_sale.html')
 
-
-def edit_sale(app):
     @app.route('/edit_sale/<int:sale_id>', methods=['GET', 'POST'])
     def edit_sale(sale_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         sale = Sale.query.get_or_404(sale_id)
 
         if request.method == 'POST':
@@ -61,10 +63,10 @@ def edit_sale(app):
 
         return render_template('edit_sale.html', sale=sale)
 
-
-def delete_sale(app):
     @app.route('/delete_sale/<int:sale_id>', methods=['POST'])
     def delete_sale(sale_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         sale = Sale.query.get_or_404(sale_id)
         try:
             db.session.delete(sale)

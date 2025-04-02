@@ -2,15 +2,18 @@ from models import *
 from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_orders(app):
+def orders_routes(app):
     @app.route('/view_orders')
     def view_orders():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         orders = Order.query.all()
         return render_template('view_orders.html', orders=orders)
 
-def add_order(app):
     @app.route('/add_order', methods=['GET', 'POST'])
     def add_order():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             car_id = request.form['car_id']
             supplier_id = request.form['supplier_id']
@@ -33,9 +36,10 @@ def add_order(app):
 
         return render_template('add_order.html')
 
-def edit_order(app):
     @app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
     def edit_order(order_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         order = Order.query.get_or_404(order_id)
 
         if request.method == 'POST':
@@ -56,9 +60,10 @@ def edit_order(app):
 
         return render_template('edit_order.html', order=order)
 
-def delete_order(app):
     @app.route('/delete_order/<int:order_id>', methods=['POST'])
     def delete_order(order_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         order = Order.query.get_or_404(order_id)
         try:
             db.session.delete(order)

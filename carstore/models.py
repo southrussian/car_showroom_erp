@@ -167,6 +167,5 @@ class CustomerFeedback(db.Model):
     feedback_date = db.Column(db.Date, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     comments = db.Column(db.Text)
-
     client = db.relationship('Client', backref='customer_feedback')
     car = db.relationship('Car', backref='customer_feedback')

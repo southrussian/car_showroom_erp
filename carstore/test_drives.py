@@ -2,15 +2,18 @@ from models import *
 from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_test_drives(app):
+def test_drives_routes(app):
     @app.route('/view_test_drives')
     def view_test_drives():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         test_drives = TestDrive.query.all()
         return render_template('view_test_drives.html', test_drives=test_drives)
 
-def add_test_drive(app):
     @app.route('/add_test_drive', methods=['GET', 'POST'])
     def add_test_drive():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             client_id = request.form['client_id']
             car_id = request.form['car_id']
@@ -33,9 +36,10 @@ def add_test_drive(app):
 
         return render_template('add_test_drive.html')
 
-def edit_test_drive(app):
     @app.route('/edit_test_drive/<int:test_drive_id>', methods=['GET', 'POST'])
     def edit_test_drive(test_drive_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         test_drive = TestDrive.query.get_or_404(test_drive_id)
 
         if request.method == 'POST':
@@ -56,9 +60,10 @@ def edit_test_drive(app):
 
         return render_template('edit_test_drive.html', test_drive=test_drive)
 
-def delete_test_drive(app):
     @app.route('/delete_test_drive/<int:test_drive_id>', methods=['POST'])
     def delete_test_drive(test_drive_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         test_drive = TestDrive.query.get_or_404(test_drive_id)
         try:
             db.session.delete(test_drive)

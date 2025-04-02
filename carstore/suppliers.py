@@ -2,15 +2,18 @@ from models import *
 from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_suppliers(app):
+def suppliers_routes(app):
     @app.route('/view_suppliers')
     def view_suppliers():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         suppliers = Supplier.query.all()
         return render_template('view_suppliers.html', suppliers=suppliers)
 
-def add_supplier(app):
     @app.route('/add_supplier', methods=['GET', 'POST'])
     def add_supplier():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             name = request.form['name']
             contact_person = request.form['contact_person']
@@ -19,7 +22,7 @@ def add_supplier(app):
             address = request.form['address']
 
             supplier = Supplier(name=name, contact_person=contact_person, phone_number=phone_number, email=email,
-                               address=address)
+                                address=address)
 
             try:
                 db.session.add(supplier)
@@ -32,9 +35,10 @@ def add_supplier(app):
 
         return render_template('add_supplier.html')
 
-def edit_supplier(app):
     @app.route('/edit_supplier/<int:supplier_id>', methods=['GET', 'POST'])
     def edit_supplier(supplier_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         supplier = Supplier.query.get_or_404(supplier_id)
 
         if request.method == 'POST':
@@ -54,9 +58,10 @@ def edit_supplier(app):
 
         return render_template('edit_supplier.html', supplier=supplier)
 
-def delete_supplier(app):
     @app.route('/delete_supplier/<int:supplier_id>', methods=['POST'])
     def delete_supplier(supplier_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         supplier = Supplier.query.get_or_404(supplier_id)
         try:
             db.session.delete(supplier)

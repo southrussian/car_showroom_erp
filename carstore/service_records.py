@@ -2,15 +2,18 @@ from models import *
 from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_service_records(app):
+def service_records_routes(app):
     @app.route('/view_service_records')
     def view_service_records():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         service_records = ServiceRecord.query.all()
         return render_template('view_service_records.html', service_records=service_records)
 
-def add_service_record(app):
     @app.route('/add_service_record', methods=['GET', 'POST'])
     def add_service_record():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             car_id = request.form['car_id']
             service_date = request.form['service_date']
@@ -33,9 +36,10 @@ def add_service_record(app):
 
         return render_template('add_service_record.html')
 
-def edit_service_record(app):
     @app.route('/edit_service_record/<int:service_id>', methods=['GET', 'POST'])
     def edit_service_record(service_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         service_record = ServiceRecord.query.get_or_404(service_id)
 
         if request.method == 'POST':
@@ -56,9 +60,10 @@ def edit_service_record(app):
 
         return render_template('edit_service_record.html', service_record=service_record)
 
-def delete_service_record(app):
     @app.route('/delete_service_record/<int:service_id>', methods=['POST'])
     def delete_service_record(service_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         service_record = ServiceRecord.query.get_or_404(service_id)
         try:
             db.session.delete(service_record)
