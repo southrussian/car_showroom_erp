@@ -7,6 +7,8 @@ from maintenance_schedules import maintenance_schedules_routes
 from inventory import inventory_routes
 from employees import employees_routes
 from customer_feedbacks import customer_feedback_routes
+from clients import clients_routes
+from cars import cars_routes
 
 
 def register_routes(app):
@@ -19,3 +21,5 @@ def register_routes(app):
     inventory_routes(app)
     employees_routes(app)
     customer_feedback_routes(app)
+    clients_routes(app)
+    cars_routes(app)

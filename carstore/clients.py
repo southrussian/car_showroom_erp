@@ -2,15 +2,18 @@ from models import *
 from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_clients(app):
+def clients_routes(app):
     @app.route('/view_clients')
     def view_clients():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         clients = Client.query.all()
         return render_template('view_clients.html', clients=clients)
 
-def add_client(app):
     @app.route('/add_client', methods=['GET', 'POST'])
     def add_client():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             first_name = request.form['first_name']
             last_name = request.form['last_name']
@@ -36,9 +39,10 @@ def add_client(app):
 
         return render_template('add_client.html')
 
-def edit_client(app):
     @app.route('/edit_client/<int:client_id>', methods=['GET', 'POST'])
     def edit_client(client_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         client = Client.query.get_or_404(client_id)
 
         if request.method == 'POST':
@@ -61,9 +65,10 @@ def edit_client(app):
 
         return render_template('edit_client.html', client=client)
 
-def delete_client(app):
     @app.route('/delete_client/<int:client_id>', methods=['POST'])
     def delete_client(client_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         client = Client.query.get_or_404(client_id)
         try:
             db.session.delete(client)

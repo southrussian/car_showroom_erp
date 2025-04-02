@@ -2,16 +2,18 @@ from models import *
 from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_cars(app):
+def cars_routes(app):
     @app.route('/view_cars')
     def view_cars():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         cars = Car.query.all()
         return render_template('view_cars.html', cars=cars)
 
-
-def add_car(app):
     @app.route('/add_car', methods=['GET', 'POST'])
     def add_car():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         cars = Car.query.all()
         if request.method == 'POST':
             make = request.form['make']
@@ -41,10 +43,10 @@ def add_car(app):
 
         return render_template('add_car.html', cars=cars)
 
-
-def edit_car(app):
     @app.route('/edit_car/<int:car_id>', methods=['GET', 'POST'])
     def edit_car(car_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         car = Car.query.get_or_404(car_id)
 
         if request.method == 'POST':
@@ -70,10 +72,10 @@ def edit_car(app):
 
         return render_template('edit_car.html', car=car)
 
-
-def delete_car(app):
     @app.route('/delete_car/<int:car_id>', methods=['POST'])
     def delete_car(car_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         car = Car.query.get_or_404(car_id)
         try:
             db.session.delete(car)
@@ -83,4 +85,3 @@ def delete_car(app):
             db.session.rollback()
             flash(f"An error occurred: {e}", "danger")
         return redirect(url_for('view_cars'))
-
