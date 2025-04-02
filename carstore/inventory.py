@@ -1,16 +1,19 @@
 from models import *
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, session
 
 
-def view_inventory(app):
+def inventory_routes(app):
     @app.route('/view_inventory')
     def view_inventory():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         inventory = Inventory.query.all()
         return render_template('view_inventory.html', inventory=inventory)
 
-def add_inventory(app):
     @app.route('/add_inventory', methods=['GET', 'POST'])
     def add_inventory():
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         if request.method == 'POST':
             car_id = request.form['car_id']
             quantity = request.form['quantity']
@@ -32,9 +35,10 @@ def add_inventory(app):
 
         return render_template('add_inventory.html')
 
-def edit_inventory(app):
     @app.route('/edit_inventory/<int:inventory_id>', methods=['GET', 'POST'])
     def edit_inventory(inventory_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         inventory = Inventory.query.get_or_404(inventory_id)
 
         if request.method == 'POST':
@@ -54,9 +58,10 @@ def edit_inventory(app):
 
         return render_template('edit_inventory.html', inventory=inventory)
 
-def delete_inventory(app):
     @app.route('/delete_inventory/<int:inventory_id>', methods=['POST'])
     def delete_inventory(inventory_id):
+        if 'user_id' not in session:
+            return redirect(url_for('login'))
         inventory = Inventory.query.get_or_404(inventory_id)
         try:
             db.session.delete(inventory)
