@@ -47,5 +47,8 @@ def user_routes(app):
 
     @app.route('/view_users')
     def view_users():
+        if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
+            return redirect(url_for('login'))
         users = User.query.all()
         return render_template('view_users.html', users=users)

@@ -6,6 +6,7 @@ def inventory_routes(app):
     @app.route('/view_inventory')
     def view_inventory():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         inventory = Inventory.query.all()
         return render_template('view_inventory.html', inventory=inventory)
@@ -13,6 +14,7 @@ def inventory_routes(app):
     @app.route('/add_inventory', methods=['GET', 'POST'])
     def add_inventory():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             car_id = request.form['car_id']
@@ -38,6 +40,7 @@ def inventory_routes(app):
     @app.route('/edit_inventory/<int:inventory_id>', methods=['GET', 'POST'])
     def edit_inventory(inventory_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         inventory = Inventory.query.get_or_404(inventory_id)
 
@@ -61,6 +64,7 @@ def inventory_routes(app):
     @app.route('/delete_inventory/<int:inventory_id>', methods=['POST'])
     def delete_inventory(inventory_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         inventory = Inventory.query.get_or_404(inventory_id)
         try:

@@ -1,15 +1,16 @@
-from models import *
 from flask import Flask, render_template, redirect, url_for, flash, session, request
 import logging
 from logging.handlers import RotatingFileHandler
 from routes import register_routes
+from flask_migrate import Migrate
+from models import db
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autosalon.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'oxxxymiron'
 
-# Настройка логирования
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 file_handler = RotatingFileHandler('autosalon.log', maxBytes=10 * 1024 * 1024, backupCount=5)
 file_handler.setLevel(logging.INFO)
@@ -19,6 +20,7 @@ app.logger.addHandler(file_handler)
 app.logger.info("Приложение запущено.")
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 register_routes(app)
 

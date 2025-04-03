@@ -6,6 +6,7 @@ def clients_routes(app):
     @app.route('/view_clients')
     def view_clients():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         clients = Client.query.all()
         return render_template('view_clients.html', clients=clients)
@@ -13,6 +14,7 @@ def clients_routes(app):
     @app.route('/add_client', methods=['GET', 'POST'])
     def add_client():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             first_name = request.form['first_name']
@@ -42,6 +44,7 @@ def clients_routes(app):
     @app.route('/edit_client/<int:client_id>', methods=['GET', 'POST'])
     def edit_client(client_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         client = Client.query.get_or_404(client_id)
 
@@ -68,6 +71,7 @@ def clients_routes(app):
     @app.route('/delete_client/<int:client_id>', methods=['POST'])
     def delete_client(client_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         client = Client.query.get_or_404(client_id)
         try:

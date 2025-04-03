@@ -6,6 +6,7 @@ def cars_routes(app):
     @app.route('/view_cars')
     def view_cars():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         cars = Car.query.all()
         return render_template('view_cars.html', cars=cars)
@@ -13,6 +14,7 @@ def cars_routes(app):
     @app.route('/add_car', methods=['GET', 'POST'])
     def add_car():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         cars = Car.query.all()
         if request.method == 'POST':
@@ -46,6 +48,7 @@ def cars_routes(app):
     @app.route('/edit_car/<int:car_id>', methods=['GET', 'POST'])
     def edit_car(car_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         car = Car.query.get_or_404(car_id)
 
@@ -75,6 +78,7 @@ def cars_routes(app):
     @app.route('/delete_car/<int:car_id>', methods=['POST'])
     def delete_car(car_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         car = Car.query.get_or_404(car_id)
         try:

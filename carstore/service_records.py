@@ -6,6 +6,7 @@ def service_records_routes(app):
     @app.route('/view_service_records')
     def view_service_records():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         service_records = ServiceRecord.query.all()
         return render_template('view_service_records.html', service_records=service_records)
@@ -13,6 +14,7 @@ def service_records_routes(app):
     @app.route('/add_service_record', methods=['GET', 'POST'])
     def add_service_record():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             car_id = request.form['car_id']
@@ -39,6 +41,7 @@ def service_records_routes(app):
     @app.route('/edit_service_record/<int:service_id>', methods=['GET', 'POST'])
     def edit_service_record(service_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         service_record = ServiceRecord.query.get_or_404(service_id)
 
@@ -63,6 +66,7 @@ def service_records_routes(app):
     @app.route('/delete_service_record/<int:service_id>', methods=['POST'])
     def delete_service_record(service_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         service_record = ServiceRecord.query.get_or_404(service_id)
         try:

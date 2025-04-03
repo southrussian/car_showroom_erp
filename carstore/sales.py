@@ -6,6 +6,7 @@ def sales_routes(app):
     @app.route('/view_sales')
     def view_sales():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         sales = Sale.query.all()
         return render_template('view_sales.html', sales=sales)
@@ -13,6 +14,7 @@ def sales_routes(app):
     @app.route('/add_sale', methods=['GET', 'POST'])
     def add_sale():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             client_id = request.form['client_id']
@@ -41,6 +43,7 @@ def sales_routes(app):
     @app.route('/edit_sale/<int:sale_id>', methods=['GET', 'POST'])
     def edit_sale(sale_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         sale = Sale.query.get_or_404(sale_id)
 
@@ -66,6 +69,7 @@ def sales_routes(app):
     @app.route('/delete_sale/<int:sale_id>', methods=['POST'])
     def delete_sale(sale_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         sale = Sale.query.get_or_404(sale_id)
         try:

@@ -39,6 +39,7 @@ def orders_routes(app):
     @app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
     def edit_order(order_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         order = Order.query.get_or_404(order_id)
 
@@ -63,6 +64,7 @@ def orders_routes(app):
     @app.route('/delete_order/<int:order_id>', methods=['POST'])
     def delete_order(order_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         order = Order.query.get_or_404(order_id)
         try:

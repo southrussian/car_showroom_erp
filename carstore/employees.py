@@ -6,6 +6,7 @@ def employees_routes(app):
     @app.route('/view_employees')
     def view_employees():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         employees = Employee.query.all()
         return render_template('view_employees.html', employees=employees)
@@ -13,6 +14,7 @@ def employees_routes(app):
     @app.route('/add_employee', methods=['GET', 'POST'])
     def add_employee():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             user_id = request.form['user_id']
@@ -41,6 +43,7 @@ def employees_routes(app):
     @app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
     def edit_employee(employee_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         employee = Employee.query.get_or_404(employee_id)
 
@@ -67,6 +70,7 @@ def employees_routes(app):
     @app.route('/delete_employee/<int:employee_id>', methods=['POST'])
     def delete_employee(employee_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         employee = Employee.query.get_or_404(employee_id)
         try:

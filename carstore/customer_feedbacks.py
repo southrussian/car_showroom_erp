@@ -6,6 +6,7 @@ def customer_feedback_routes(app):
     @app.route('/view_customer_feedback')
     def view_customer_feedback():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         customer_feedback = CustomerFeedback.query.all()
         return render_template('view_customer_feedback.html', customer_feedback=customer_feedback)
@@ -13,6 +14,7 @@ def customer_feedback_routes(app):
     @app.route('/add_customer_feedback', methods=['GET', 'POST'])
     def add_customer_feedback():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             client_id = request.form['client_id']
@@ -38,6 +40,7 @@ def customer_feedback_routes(app):
     @app.route('/edit_customer_feedback/<int:feedback_id>', methods=['GET', 'POST'])
     def edit_customer_feedback(feedback_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         customer_feedback = CustomerFeedback.query.get_or_404(feedback_id)
 
@@ -61,6 +64,7 @@ def customer_feedback_routes(app):
     @app.route('/delete_customer_feedback/<int:feedback_id>', methods=['POST'])
     def delete_customer_feedback(feedback_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         customer_feedback = CustomerFeedback.query.get_or_404(feedback_id)
         try:

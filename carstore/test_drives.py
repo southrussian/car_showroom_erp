@@ -6,6 +6,7 @@ def test_drives_routes(app):
     @app.route('/view_test_drives')
     def view_test_drives():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         test_drives = TestDrive.query.all()
         return render_template('view_test_drives.html', test_drives=test_drives)
@@ -13,6 +14,7 @@ def test_drives_routes(app):
     @app.route('/add_test_drive', methods=['GET', 'POST'])
     def add_test_drive():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             client_id = request.form['client_id']
@@ -39,6 +41,7 @@ def test_drives_routes(app):
     @app.route('/edit_test_drive/<int:test_drive_id>', methods=['GET', 'POST'])
     def edit_test_drive(test_drive_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         test_drive = TestDrive.query.get_or_404(test_drive_id)
 
@@ -63,6 +66,7 @@ def test_drives_routes(app):
     @app.route('/delete_test_drive/<int:test_drive_id>', methods=['POST'])
     def delete_test_drive(test_drive_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         test_drive = TestDrive.query.get_or_404(test_drive_id)
         try:

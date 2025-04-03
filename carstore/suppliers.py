@@ -6,6 +6,7 @@ def suppliers_routes(app):
     @app.route('/view_suppliers')
     def view_suppliers():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         suppliers = Supplier.query.all()
         return render_template('view_suppliers.html', suppliers=suppliers)
@@ -13,6 +14,7 @@ def suppliers_routes(app):
     @app.route('/add_supplier', methods=['GET', 'POST'])
     def add_supplier():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         if request.method == 'POST':
             name = request.form['name']
@@ -38,6 +40,7 @@ def suppliers_routes(app):
     @app.route('/edit_supplier/<int:supplier_id>', methods=['GET', 'POST'])
     def edit_supplier(supplier_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         supplier = Supplier.query.get_or_404(supplier_id)
 
@@ -61,6 +64,7 @@ def suppliers_routes(app):
     @app.route('/delete_supplier/<int:supplier_id>', methods=['POST'])
     def delete_supplier(supplier_id):
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         supplier = Supplier.query.get_or_404(supplier_id)
         try:
