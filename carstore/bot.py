@@ -41,7 +41,7 @@ async def cars_handler(message: types.Message):
         response = "Список автомобилей:\n\n"
         for car in cars:
             # Форматирование строки для каждого автомобиля
-            response += f"ID: {car[0]} | Модель: {car[1]} | Цена: {car[2]}\n"
+            response += f"{car[0]} {car[1]} | Статус: {car[2]} | Цена: {int(car[3])} руб.\n"
     else:
         response = "Автомобили не найдены."
     await message.reply(response)
