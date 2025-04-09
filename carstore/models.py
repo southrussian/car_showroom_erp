@@ -24,13 +24,10 @@ class Client(db.Model):
     __tablename__ = 'clients'
     client_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
+    middle_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     phone_number = db.Column(db.String(20))
     email = db.Column(db.String(120), unique=True, nullable=False)
-    address = db.Column(db.String(150))
-    date_of_birth = db.Column(db.Date)
-    gender = db.Column(db.String(10))
-    preferred_contact_method = db.Column(db.String(20))
 
 
 class Car(db.Model):
@@ -52,31 +49,56 @@ class Car(db.Model):
 class Sale(db.Model):
     __tablename__ = 'sales'
     sale_id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    sale_date = db.Column(db.DateTime, default=datetime.utcnow)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)
+    sale_date = db.Column(db.DateTime, default=datetime.now())
     sale_price = db.Column(db.Float, nullable=False)
     salesperson_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
     payment_method = db.Column(db.String(20))
-    financing_details = db.Column(db.Text)
 
     client = db.relationship('Client', backref='sales')
     car = db.relationship('Car', backref='sales')
     salesperson = db.relationship('Employee', backref='sales')
 
 
-class ServiceRecord(db.Model):
-    __tablename__ = 'service_records'
-    service_id = db.Column(db.Integer, primary_key=True)
+class Order(db.Model):
+    __tablename__ = 'orders'
+    order_id = db.Column(db.Integer, primary_key=True)
     car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    service_date = db.Column(db.DateTime, default=datetime.utcnow)
-    service_type = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text)
-    cost = db.Column(db.Float, nullable=False)
-    mechanic_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    order_date = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    expected_delivery_date = db.Column(db.Date)
+    status = db.Column(db.String(20), nullable=False)
 
-    car = db.relationship('Car', backref='service_records')
-    mechanic = db.relationship('Employee', backref='service_records')
+    car = db.relationship('Car', backref='orders')
+    client = db.relationship('Client', backref='orders')
+
+
+class ServiceType(db.Model):
+    __tablename__ = 'service_types'
+    type_id = db.Column(db.Integer, primary_key=True)
+    service_name = db.Column(db.String(50), nullable=False)
+
+
+class ServiceRequest(db.Model):
+    __tablename__ = 'service_requests'
+    request_id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
+    requested_date = db.Column(db.DateTime, default=datetime.now())
+    service_type = db.Column(db.String(50), db.ForeignKey('service_types.type_id'), nullable=False)
+    description = db.Column(db.Text)
+
+    car = db.relationship('Car', backref='service_requests')
+    client = db.relationship('Client', backref='service_requests')
+    type = db.relationship('Type', backref='service_requests')
+
+
+class Service(db.Model):
+    __tablename__ = 'services'
+    service_id = db.Column(db.Integer, primary_key=True)
+    request_id = db.Column(db.Integer, db.ForeignKey('service_requests.request_id'), nullable=False)
+    service_date = db.Column(db.DateTime, default=datetime.now())
+    status = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text)
 
 
 class Employee(db.Model):
@@ -84,27 +106,13 @@ class Employee(db.Model):
     employee_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
+    middle_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=False)
     position = db.Column(db.String(50), nullable=False)
     phone_number = db.Column(db.String(20))
     email = db.Column(db.String(120), unique=True, nullable=False)
-    hire_date = db.Column(db.Date, nullable=False)
-    department = db.Column(db.String(50))
 
     user = db.relationship('User', backref=db.backref('employee', uselist=False))
-
-
-class Inventory(db.Model):
-    __tablename__ = 'inventory'
-    inventory_id = db.Column(db.Integer, primary_key=True)
-    car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    location = db.Column(db.String(100))
-    arrival_date = db.Column(db.Date, nullable=False)
-    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.supplier_id'), nullable=False)
-
-    car = db.relationship('Car', backref='inventory')
-    supplier = db.relationship('Supplier', backref='inventory')
 
 
 class TestDrive(db.Model):
@@ -112,7 +120,7 @@ class TestDrive(db.Model):
     test_drive_id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
     car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    test_drive_date = db.Column(db.DateTime, default=datetime.utcnow)
+    test_drive_date = db.Column(db.DateTime, default=datetime.now())
     employee_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
     feedback = db.Column(db.Text)
     rating = db.Column(db.Integer)
@@ -122,50 +130,11 @@ class TestDrive(db.Model):
     employee = db.relationship('Employee', backref='test_drives')
 
 
-class Supplier(db.Model):
-    __tablename__ = 'suppliers'
-    supplier_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    contact_person = db.Column(db.String(50))
-    phone_number = db.Column(db.String(20))
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    address = db.Column(db.String(150))
-
-
-class Order(db.Model):
-    __tablename__ = 'orders'
-    order_id = db.Column(db.Integer, primary_key=True)
-    car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    supplier_id = db.Column(db.Integer, db.ForeignKey('suppliers.supplier_id'), nullable=False)
-    order_date = db.Column(db.Date, nullable=False)
-    expected_delivery_date = db.Column(db.Date)
-    quantity = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.String(20), nullable=False)
-
-    car = db.relationship('Car', backref='orders')
-    supplier = db.relationship('Supplier', backref='orders')
-
-
-class MaintenanceSchedule(db.Model):
-    __tablename__ = 'maintenance_schedule'
-    schedule_id = db.Column(db.Integer, primary_key=True)
-    car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    scheduled_date = db.Column(db.Date, nullable=False)
-    service_type = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text)
-    mechanic_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
-
-    car = db.relationship('Car', backref='maintenance_schedule')
-    mechanic = db.relationship('Employee', backref='maintenance_schedule')
-
-
-class CustomerFeedback(db.Model):
-    __tablename__ = 'customer_feedback'
-    feedback_id = db.Column(db.Integer, primary_key=True)
+class Consultation(db.Model):
+    __tablename__ = 'consultations'
+    consultation_id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.Integer, db.ForeignKey('clients.client_id'), nullable=False)
-    car_id = db.Column(db.Integer, db.ForeignKey('cars.car_id'), nullable=False)
-    feedback_date = db.Column(db.Date, nullable=False)
-    rating = db.Column(db.Integer, nullable=False)
-    comments = db.Column(db.Text)
-    client = db.relationship('Client', backref='customer_feedback')
-    car = db.relationship('Car', backref='customer_feedback')
+    consultation_date = db.Column(db.DateTime, default=datetime.now())
+    description = db.Column(db.Text)
+
+    client = db.relationship('Client', backref='test_drives')
