@@ -88,8 +88,7 @@ class ServiceRequest(db.Model):
     description = db.Column(db.Text)
 
     client = db.relationship('Client', backref=db.backref('service_requests', cascade="all, delete-orphan"))
-    service_type_rel = db.relationship('ServiceType', backref=db.backref('service_requests',
-                                                                         cascade="all, delete-orphan"))
+    type = db.relationship('ServiceType', backref=db.backref('service_requests', cascade="all, delete-orphan"))
 
 
 class Service(db.Model):

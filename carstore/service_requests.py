@@ -11,7 +11,7 @@ def service_requests_routes(app):
 
         service_requests = ServiceRequest.query.options(
             db.joinedload(ServiceRequest.client),
-            db.joinedload(ServiceRequest.service_type_rel)
+            db.joinedload(ServiceRequest.type)
         ).all()
         return render_template('view_service_requests.html',
                                service_requests=service_requests)
