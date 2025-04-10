@@ -8,7 +8,10 @@ def employees_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
-        employees = Employee.query.all()
+
+        employees = Employee.query.options(
+            db.joinedload(Employee.user)
+        ).all()
         return render_template('view_employees.html', employees=employees)
 
     @app.route('/add_employee', methods=['GET', 'POST'])
@@ -16,18 +19,25 @@ def employees_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             user_id = request.form['user_id']
             first_name = request.form['first_name']
+            middle_name = request.form.get('middle_name', '')
             last_name = request.form['last_name']
             position = request.form['position']
-            phone_number = request.form['phone_number']
+            phone_number = request.form.get('phone_number', '')
             email = request.form['email']
-            hire_date = request.form['hire_date']
-            department = request.form['department']
 
-            employee = Employee(user_id=user_id, first_name=first_name, last_name=last_name, position=position,
-                                phone_number=phone_number, email=email, hire_date=hire_date, department=department)
+            employee = Employee(
+                user_id=user_id,
+                first_name=first_name,
+                middle_name=middle_name,
+                last_name=last_name,
+                position=position,
+                phone_number=phone_number,
+                email=email
+            )
 
             try:
                 db.session.add(employee)
@@ -38,24 +48,28 @@ def employees_routes(app):
                 db.session.rollback()
                 flash(f"An error occurred: {e}", "danger")
 
-        return render_template('add_employee.html')
+        users = User.query.all()
+        positions = ['Manager', 'Salesperson', 'Technician', 'Administrator']  # Пример возможных должностей
+        return render_template('add_employee.html',
+                               users=users,
+                               positions=positions)
 
     @app.route('/edit_employee/<int:employee_id>', methods=['GET', 'POST'])
     def edit_employee(employee_id):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         employee = Employee.query.get_or_404(employee_id)
 
         if request.method == 'POST':
             employee.user_id = request.form['user_id']
             employee.first_name = request.form['first_name']
+            employee.middle_name = request.form.get('middle_name', '')
             employee.last_name = request.form['last_name']
             employee.position = request.form['position']
-            employee.phone_number = request.form['phone_number']
+            employee.phone_number = request.form.get('phone_number', '')
             employee.email = request.form['email']
-            employee.hire_date = request.form['hire_date']
-            employee.department = request.form['department']
 
             try:
                 db.session.commit()
@@ -65,13 +79,19 @@ def employees_routes(app):
                 db.session.rollback()
                 flash(f"An error occurred: {e}", "danger")
 
-        return render_template('edit_employee.html', employee=employee)
+        users = User.query.all()
+        positions = ['Менеджер', 'Продавец', 'Инженер', 'Администратор']
+        return render_template('edit_employee.html',
+                               employee=employee,
+                               users=users,
+                               positions=positions)
 
     @app.route('/delete_employee/<int:employee_id>', methods=['POST'])
     def delete_employee(employee_id):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         employee = Employee.query.get_or_404(employee_id)
         try:
             db.session.delete(employee)

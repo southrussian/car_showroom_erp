@@ -8,7 +8,11 @@ def sales_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
-        sales = Sale.query.all()
+
+        sales = Sale.query.options(
+            db.joinedload(Sale.order),
+            db.joinedload(Sale.salesperson)
+        ).all()
         return render_template('view_sales.html', sales=sales)
 
     @app.route('/add_sale', methods=['GET', 'POST'])
@@ -16,18 +20,19 @@ def sales_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
-        if request.method == 'POST':
-            client_id = request.form['client_id']
-            car_id = request.form['car_id']
-            sale_date = request.form['sale_date']
-            sale_price = request.form['sale_price']
-            salesperson_id = request.form['salesperson_id']
-            payment_method = request.form['payment_method']
-            financing_details = request.form['financing_details']
 
-            sale = Sale(client_id=client_id, car_id=car_id, sale_date=sale_date, sale_price=sale_price,
-                        salesperson_id=salesperson_id, payment_method=payment_method,
-                        financing_details=financing_details)
+        if request.method == 'POST':
+            order_id = request.form['order_id']
+            sale_price = float(request.form['sale_price'])
+            salesperson_id = request.form['salesperson_id']
+            payment_method = request.form.get('payment_method')
+
+            sale = Sale(
+                order_id=order_id,
+                sale_price=sale_price,
+                salesperson_id=salesperson_id,
+                payment_method=payment_method
+            )
 
             try:
                 db.session.add(sale)
@@ -38,23 +43,23 @@ def sales_routes(app):
                 db.session.rollback()
                 flash(f"An error occurred: {e}", "danger")
 
-        return render_template('add_sale.html')
+        orders = Order.query.all()
+        employees = Employee.query.filter_by(position='salesperson').all()
+        return render_template('add_sale.html', orders=orders, employees=employees)
 
     @app.route('/edit_sale/<int:sale_id>', methods=['GET', 'POST'])
     def edit_sale(sale_id):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         sale = Sale.query.get_or_404(sale_id)
 
         if request.method == 'POST':
-            sale.client_id = request.form['client_id']
-            sale.car_id = request.form['car_id']
-            sale.sale_date = request.form['sale_date']
-            sale.sale_price = request.form['sale_price']
+            sale.order_id = request.form['order_id']
+            sale.sale_price = float(request.form['sale_price'])
             sale.salesperson_id = request.form['salesperson_id']
-            sale.payment_method = request.form['payment_method']
-            sale.financing_details = request.form['financing_details']
+            sale.payment_method = request.form.get('payment_method')
 
             try:
                 db.session.commit()
@@ -64,13 +69,16 @@ def sales_routes(app):
                 db.session.rollback()
                 flash(f"An error occurred: {e}", "danger")
 
-        return render_template('edit_sale.html', sale=sale)
+        orders = Order.query.all()
+        employees = Employee.query.filter_by(position='salesperson').all()
+        return render_template('edit_sale.html', sale=sale, orders=orders, employees=employees)
 
     @app.route('/delete_sale/<int:sale_id>', methods=['POST'])
     def delete_sale(sale_id):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         sale = Sale.query.get_or_404(sale_id)
         try:
             db.session.delete(sale)

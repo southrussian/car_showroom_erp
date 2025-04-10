@@ -16,19 +16,21 @@ def clients_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             first_name = request.form['first_name']
+            middle_name = request.form['middle_name']
             last_name = request.form['last_name']
             phone_number = request.form['phone_number']
             email = request.form['email']
-            address = request.form['address']
-            date_of_birth = request.form['date_of_birth']
-            gender = request.form['gender']
-            preferred_contact_method = request.form['preferred_contact_method']
 
-            client = Client(first_name=first_name, last_name=last_name, phone_number=phone_number, email=email,
-                            address=address, date_of_birth=date_of_birth, gender=gender,
-                            preferred_contact_method=preferred_contact_method)
+            client = Client(
+                first_name=first_name,
+                middle_name=middle_name,
+                last_name=last_name,
+                phone_number=phone_number,
+                email=email
+            )
 
             try:
                 db.session.add(client)
@@ -46,17 +48,15 @@ def clients_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         client = Client.query.get_or_404(client_id)
 
         if request.method == 'POST':
             client.first_name = request.form['first_name']
+            client.middle_name = request.form['middle_name']
             client.last_name = request.form['last_name']
             client.phone_number = request.form['phone_number']
             client.email = request.form['email']
-            client.address = request.form['address']
-            client.date_of_birth = request.form['date_of_birth']
-            client.gender = request.form['gender']
-            client.preferred_contact_method = request.form['preferred_contact_method']
 
             try:
                 db.session.commit()
@@ -73,6 +73,7 @@ def clients_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         client = Client.query.get_or_404(client_id)
         try:
             db.session.delete(client)
