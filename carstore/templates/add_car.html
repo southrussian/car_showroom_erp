@@ -243,8 +243,9 @@
     <header class="header">
         <div class="container header-content">
             <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Volkswagen_logo_2019.svg/1200px-Volkswagen_logo_2019.svg.png" alt="Volkswagen Logo">
-                <span class="logo-text">ААА моторс - Запад</span>
+                <a href="{{ url_for('dashboard') }}">
+                    <span class="logo-text">Япония-Моторс</span>
+                </a>
             </div>
             <a href="{{ url_for('logout') }}" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i> Выйти

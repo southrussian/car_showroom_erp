@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактировать клиента | Япония-моторс</title>
+    <title>Редактировать заказ | Япония-Моторс</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+        /* Тот же CSS что и в add_order.html */
         :root {
             --primary: #0058A3;
             --primary-light: #E6F0F8;
@@ -42,6 +43,7 @@
             padding: 0 20px;
         }
 
+        /* Header */
         .header {
             background-color: var(--white);
             box-shadow: var(--shadow-sm);
@@ -61,6 +63,10 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .logo img {
+            height: 36px;
         }
 
         .logo-text {
@@ -90,6 +96,7 @@
             transform: translateY(-1px);
         }
 
+        /* Main content */
         .main {
             padding: 32px 0;
         }
@@ -127,6 +134,7 @@
             background-color: #E5E7EB;
         }
 
+        /* Form */
         .form-card {
             background-color: var(--white);
             border-radius: var(--border-radius);
@@ -165,6 +173,14 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236B7280' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px 12px;
         }
 
         .form-actions {
@@ -249,8 +265,8 @@
     <main class="main">
         <div class="container">
             <div class="page-header">
-                <h1 class="page-title">Редактировать клиента</h1>
-                <a href="{{ url_for('view_clients') }}" class="back-btn">
+                <h1 class="page-title">Редактировать заказ #{{ order.order_id }}</h1>
+                <a href="{{ url_for('view_orders') }}" class="back-btn">
                     <i class="fas fa-arrow-left"></i> Назад к списку
                 </a>
             </div>
@@ -266,31 +282,44 @@
             {% endwith %}
 
             <div class="form-card">
-                <form method="POST" action="{{ url_for('edit_client', client_id=client.client_id) }}">
+                <form method="POST" action="{{ url_for('edit_order', order_id=order.order_id) }}">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="first_name">Имя</label>
-                            <input type="text" id="first_name" name="first_name" class="form-control" value="{{ client.first_name }}" required>
+                            <label for="car_id">Автомобиль</label>
+                            <select id="car_id" name="car_id" class="form-control" required>
+                                {% for car in cars %}
+                                <option value="{{ car.car_id }}" {% if car.car_id == order.car_id %}selected{% endif %}>
+                                    {{ car.make }} {{ car.model }} ({{ car.year }}, {{ car.color }}) - {{ car.price }} ₽
+                                </option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="middle_name">Отчество</label>
-                            <input type="text" id="middle_name" name="middle_name" class="form-control" value="{{ client.middle_name }}">
+                            <label for="client_id">Клиент</label>
+                            <select id="client_id" name="client_id" class="form-control" required>
+                                {% for client in clients %}
+                                <option value="{{ client.client_id }}" {% if client.client_id == order.client_id %}selected{% endif %}>
+                                    {{ client.last_name }} {{ client.first_name }} - {{ client.phone_number }}
+                                </option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="last_name">Фамилия</label>
-                            <input type="text" id="last_name" name="last_name" class="form-control" value="{{ client.last_name }}" required>
+                            <label for="expected_delivery_date">Ожидаемая дата доставки</label>
+                            <input type="date" id="expected_delivery_date" name="expected_delivery_date"
+                                   class="form-control"
+                                   value="{{ order.expected_delivery_date.strftime('%Y-%m-%d') if order.expected_delivery_date else '' }}">
                         </div>
 
                         <div class="form-group">
-                            <label for="phone_number">Телефон</label>
-                            <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ client.phone_number }}" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" value="{{ client.email }}" required>
+                            <label for="status">Статус</label>
+                            <select id="status" name="status" class="form-control" required>
+                                <option value="new" {% if order.status == 'В обработке' %}selected{% endif %}>В обработке</option>
+                                <option value="processing" {% if order.status == 'Доставлен' %}selected{% endif %}>Доставлен</option>
+                                <option value="completed" {% if order.status == 'В пути' %}selected{% endif %}>В пути</option>
+                            </select>
                         </div>
                     </div>
 
