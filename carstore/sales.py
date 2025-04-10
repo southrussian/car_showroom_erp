@@ -44,7 +44,7 @@ def sales_routes(app):
                 flash(f"Возникла ошибка: {e}", "danger")
 
         orders = Order.query.all()
-        employees = Employee.query.filter_by(position='salesperson').all()
+        employees = Employee.query.all()
         return render_template('add_sale.html', orders=orders, employees=employees)
 
     @app.route('/edit_sale/<int:sale_id>', methods=['GET', 'POST'])
@@ -70,7 +70,7 @@ def sales_routes(app):
                 flash(f"Возникла ошибка: {e}", "danger")
 
         orders = Order.query.all()
-        employees = Employee.query.filter_by(position='salesperson').all()
+        employees = Employee.query.all()
         return render_template('edit_sale.html', sale=sale, orders=orders, employees=employees)
 
     @app.route('/delete_sale/<int:sale_id>', methods=['POST'])
