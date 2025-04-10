@@ -48,12 +48,12 @@ def consultations_routes(app):
         return render_template('add_consultation.html', clients=clients, employees=employees)
 
     @app.route('/edit_consultation/<int:consultation_id>', methods=['GET', 'POST'])
-    def edit_consultation(test_drive_id):
+    def edit_consultation(consultation_id):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
 
-        consultation = Consultation.query.get_or_404(test_drive_id)
+        consultation = Consultation.query.get_or_404(consultation_id)
 
         if request.method == 'POST':
             consultation.client_id = request.form['client_id']

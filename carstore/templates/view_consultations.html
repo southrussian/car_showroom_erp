@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сотрудники | Япония-моторс</title>
+    <title>Консультации | Volkswagen ААА моторс</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
@@ -15,11 +15,13 @@
             --gray: #6B7280;
             --light-gray: #F3F4F6;
             --white: #FFFFFF;
-            --danger: #EF4444;
             --success: #10B981;
-            --border-radius: 8px;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --border-radius: 12px;
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -37,11 +39,12 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
+        /* Header */
         .header {
             background-color: var(--white);
             box-shadow: var(--shadow-sm);
@@ -61,6 +64,10 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .logo img {
+            height: 36px;
         }
 
         .logo-text {
@@ -90,6 +97,7 @@
             transform: translateY(-1px);
         }
 
+        /* Main content */
         .main {
             padding: 32px 0;
         }
@@ -132,6 +140,7 @@
             transform: translateY(-1px);
         }
 
+        /* Table */
         .table-container {
             background-color: var(--white);
             border-radius: var(--border-radius);
@@ -162,6 +171,43 @@
 
         .table tr:hover {
             background-color: #F9FAFB;
+        }
+
+        .consultation-info {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .consultation-details {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .consultation-date {
+            white-space: nowrap;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background-color: #DCFCE7;
+            color: #166534;
+        }
+
+        .status-planned {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .status-canceled {
+            background-color: #FEE2E2;
+            color: #991B1B;
         }
 
         .action-btns {
@@ -231,9 +277,9 @@
     <main class="main">
         <div class="container">
             <div class="page-header">
-                <h1 class="page-title">Сотрудники</h1>
-                <a href="{{ url_for('add_employee') }}" class="btn">
-                    <i class="fas fa-plus"></i> Добавить сотрудника
+                <h1 class="page-title">Консультации</h1>
+                <a href="{{ url_for('add_consultation') }}" class="btn">
+                    <i class="fas fa-plus"></i> Новая консультация
                 </a>
             </div>
 
@@ -251,31 +297,36 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Имя</th>
-                            <th>Отчество</th>
-                            <th>Фамилия</th>
-                            <th>Должность</th>
-                            <th>Телефон</th>
-                            <th>Email</th>
+                            <th>Клиент</th>
+                            <th>Дата и время</th>
+                            <th>Консультант</th>
                             <th>Действия</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for employee in employees %}
+                        {% for consultation in consultations %}
                         <tr>
-                            <td>{{ employee.first_name }}</td>
-                            <td>{{ employee.middle_name }}</td>
-                            <td>{{ employee.last_name }}</td>
-                            <td>{{ employee.position }}</td>
-                            <td>{{ employee.phone_number }}</td>
-                            <td>{{ employee.email }}</td>
+                            <td>
+                                <div class="consultation-info">
+                                    {{ consultation.client.last_name }} {{ consultation.client.first_name }} {{ consultation.client.middle_name }}
+                                </div>
+                                <div class="consultation-details">
+                                    {{ consultation.client.phone_number }} | {{ consultation.client.email }}
+                                </div>
+                            </td>
+                            <td class="consultation-date">
+                                {{ consultation.consultation_date.strftime('%d.%m.%Y %H:%M') }}
+                            </td>
+                            <td>
+                                {{ consultation.employee.last_name }} {{ consultation.employee.first_name }}
+                            </td>
                             <td>
                                 <div class="action-btns">
-                                    <a href="{{ url_for('edit_employee', employee_id=employee.employee_id) }}" class="action-btn" title="Редактировать">
+                                    <a href="{{ url_for('edit_consultation', consultation_id=consultation.consultation_id) }}" class="action-btn" title="Редактировать">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form method="POST" action="{{ url_for('delete_employee', employee_id=employee.employee_id) }}" style="display: inline;">
-                                        <button type="submit" class="action-btn" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить этого сотрудника?')">
+                                    <form method="POST" action="{{ url_for('delete_consultation', consultation_id=consultation.consultation_id) }}" style="display: inline;">
+                                        <button type="submit" class="action-btn" title="Удалить" onclick="return confirm('Вы уверены, что хотите удалить эту консультацию?')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
