@@ -6,6 +6,7 @@ def orders_routes(app):
     @app.route('/view_orders')
     def view_orders():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
         orders = Order.query.all()
         return render_template('view_orders.html', orders=orders)
@@ -13,17 +14,22 @@ def orders_routes(app):
     @app.route('/add_order', methods=['GET', 'POST'])
     def add_order():
         if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         if request.method == 'POST':
             car_id = request.form['car_id']
-            supplier_id = request.form['supplier_id']
-            order_date = request.form['order_date']
+            client_id = request.form['client_id']
             expected_delivery_date = request.form['expected_delivery_date']
-            quantity = request.form['quantity']
             status = request.form['status']
 
-            order = Order(car_id=car_id, supplier_id=supplier_id, order_date=order_date,
-                          expected_delivery_date=expected_delivery_date, quantity=quantity, status=status)
+            order = Order(
+                car_id=car_id,
+                client_id=client_id,
+                expected_delivery_date=datetime.strptime(expected_delivery_date,
+                                                         '%Y-%m-%d').date() if expected_delivery_date else None,
+                status=status
+            )
 
             try:
                 db.session.add(order)
@@ -34,21 +40,24 @@ def orders_routes(app):
                 db.session.rollback()
                 flash(f"An error occurred: {e}", "danger")
 
-        return render_template('add_order.html')
+        cars = Car.query.all()
+        clients = Client.query.all()
+        return render_template('add_order.html', cars=cars, clients=clients)
 
     @app.route('/edit_order/<int:order_id>', methods=['GET', 'POST'])
     def edit_order(order_id):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         order = Order.query.get_or_404(order_id)
 
         if request.method == 'POST':
             order.car_id = request.form['car_id']
-            order.supplier_id = request.form['supplier_id']
-            order.order_date = request.form['order_date']
-            order.expected_delivery_date = request.form['expected_delivery_date']
-            order.quantity = request.form['quantity']
+            order.client_id = request.form['client_id']
+            order.expected_delivery_date = datetime.strptime(request.form['expected_delivery_date'],
+                                                             '%Y-%m-%d').date() if request.form[
+                'expected_delivery_date'] else None
             order.status = request.form['status']
 
             try:
@@ -59,7 +68,9 @@ def orders_routes(app):
                 db.session.rollback()
                 flash(f"An error occurred: {e}", "danger")
 
-        return render_template('edit_order.html', order=order)
+        cars = Car.query.all()
+        clients = Client.query.all()
+        return render_template('edit_order.html', order=order, cars=cars, clients=clients)
 
     @app.route('/delete_order/<int:order_id>', methods=['POST'])
     def delete_order(order_id):
