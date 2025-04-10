@@ -11,7 +11,7 @@ def services_routes(app):
 
         services = Service.query.options(
             db.joinedload(Service.request).joinedload(ServiceRequest.client),
-            db.joinedload(Service.request).joinedload(ServiceRequest.service_type_rel)
+            db.joinedload(Service.request).joinedload(ServiceRequest.type)
         ).all()
         return render_template('view_services.html', services=services)
 
@@ -44,12 +44,12 @@ def services_routes(app):
 
         service_requests = ServiceRequest.query.options(
             db.joinedload(ServiceRequest.client),
-            db.joinedload(ServiceRequest.service_type_rel)
+            db.joinedload(ServiceRequest.type)
         ).all()
 
         return render_template('add_service.html',
                                service_requests=service_requests,
-                               statuses=['Pending', 'In Progress', 'Completed', 'Cancelled'])
+                               statuses=['Ожидание', 'В работе', 'Завершено', 'Отменено'])
 
     @app.route('/edit_service/<int:service_id>', methods=['GET', 'POST'])
     def edit_service(service_id):
@@ -74,13 +74,13 @@ def services_routes(app):
 
         service_requests = ServiceRequest.query.options(
             db.joinedload(ServiceRequest.client),
-            db.joinedload(ServiceRequest.service_type_rel)
+            db.joinedload(ServiceRequest.type)
         ).all()
 
         return render_template('edit_service.html',
                                service=service,
                                service_requests=service_requests,
-                               statuses=['Pending', 'In Progress', 'Completed', 'Cancelled'])
+                               statuses=['Ожидание', 'В работе', 'Завершено', 'Отменено'])
 
     @app.route('/delete_service/<int:service_id>', methods=['POST'])
     def delete_service(service_id):
