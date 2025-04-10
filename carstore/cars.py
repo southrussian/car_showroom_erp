@@ -38,11 +38,11 @@ def cars_routes(app):
             try:
                 db.session.add(car)
                 db.session.commit()
-                flash("Patient added successfully!", "success")
+                flash("Автомобиль успешно добавлен!", "success")
                 return redirect(url_for('view_patients'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         return render_template('add_car.html', cars=cars)
 
@@ -69,11 +69,11 @@ def cars_routes(app):
 
             try:
                 db.session.commit()
-                flash("Patient updated successfully!", "success")
+                flash("Информация об автомобиле успешно обновлена!", "success")
                 return redirect(url_for('view_patients'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         return render_template('edit_car.html', car=car)
 
@@ -86,8 +86,8 @@ def cars_routes(app):
         try:
             db.session.delete(car)
             db.session.commit()
-            flash("Patient deleted successfully!", "success")
+            flash("Информация об автомобиле удалена!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_cars'))
