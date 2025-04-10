@@ -36,7 +36,7 @@ def services_routes(app):
             try:
                 db.session.add(service)
                 db.session.commit()
-                flash("Service added successfully!", "success")
+                flash("Данные сервисного обслуживания успешно внесены!", "success")
                 return redirect(url_for('view_services'))
             except Exception as e:
                 db.session.rollback()
@@ -66,7 +66,7 @@ def services_routes(app):
 
             try:
                 db.session.commit()
-                flash("Service updated successfully!", "success")
+                flash("Данные сервисного обслуживания успешно обновлены!", "success")
                 return redirect(url_for('view_services'))
             except Exception as e:
                 db.session.rollback()
@@ -92,7 +92,7 @@ def services_routes(app):
         try:
             db.session.delete(service)
             db.session.commit()
-            flash("Service deleted successfully!", "success")
+            flash("Данные проведенного сервисного обслуживания успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
             flash(f"Возникла ошибка: {e}", "danger")

@@ -1,4 +1,4 @@
-from models import *
+from models import db, Employee, User
 from flask import render_template, redirect, url_for, flash, request, session
 
 
@@ -46,10 +46,10 @@ def employees_routes(app):
                 return redirect(url_for('view_employees'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         users = User.query.all()
-        positions = ['Manager', 'Salesperson', 'Technician', 'Administrator']  # Пример возможных должностей
+        positions = ['Manager', 'Salesperson', 'Technician', 'Administrator']
         return render_template('add_employee.html',
                                users=users,
                                positions=positions)
@@ -77,7 +77,7 @@ def employees_routes(app):
                 return redirect(url_for('view_employees'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         users = User.query.all()
         positions = ['Менеджер', 'Продавец', 'Инженер', 'Администратор']
@@ -96,8 +96,8 @@ def employees_routes(app):
         try:
             db.session.delete(employee)
             db.session.commit()
-            flash("Employee deleted successfully!", "success")
+            flash("Данные сотрудника успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_employees'))

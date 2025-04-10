@@ -30,7 +30,7 @@ def service_types_routes(app):
                 return redirect(url_for('view_service_types'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         return render_template('add_service_type.html')
 
@@ -51,7 +51,7 @@ def service_types_routes(app):
                 return redirect(url_for('view_service_types'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         return render_template('edit_service_type.html', service_type=service_type)
 
@@ -65,8 +65,7 @@ def service_types_routes(app):
         try:
             db.session.delete(service_type)
             db.session.commit()
-            flash("Service type deleted successfully!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_service_types'))

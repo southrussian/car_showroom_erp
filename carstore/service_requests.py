@@ -40,7 +40,7 @@ def service_requests_routes(app):
                 return redirect(url_for('view_service_requests'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         clients = Client.query.all()
         service_types = ServiceType.query.all()
@@ -67,7 +67,7 @@ def service_requests_routes(app):
                 return redirect(url_for('view_service_requests'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         clients = Client.query.all()
         service_types = ServiceType.query.all()
@@ -86,8 +86,8 @@ def service_requests_routes(app):
         try:
             db.session.delete(service_request)
             db.session.commit()
-            flash("Service request deleted successfully!", "success")
+            flash("Данные заявки на сервис успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_service_requests'))

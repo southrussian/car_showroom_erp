@@ -41,7 +41,7 @@ def sales_routes(app):
                 return redirect(url_for('view_sales'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         orders = Order.query.all()
         employees = Employee.query.filter_by(position='salesperson').all()
@@ -67,7 +67,7 @@ def sales_routes(app):
                 return redirect(url_for('view_sales'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         orders = Order.query.all()
         employees = Employee.query.filter_by(position='salesperson').all()
@@ -83,8 +83,8 @@ def sales_routes(app):
         try:
             db.session.delete(sale)
             db.session.commit()
-            flash("Sale deleted successfully!", "success")
+            flash("Данные продажи успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_sales'))

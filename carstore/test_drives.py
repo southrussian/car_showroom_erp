@@ -99,7 +99,7 @@ def test_drives_routes(app):
         try:
             db.session.delete(test_drive)
             db.session.commit()
-            flash("Test drive deleted successfully!", "success")
+            flash("Данные тест-драйва успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
             flash(f"An error occurred: {e}", "danger")

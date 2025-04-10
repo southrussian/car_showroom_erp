@@ -34,11 +34,11 @@ def orders_routes(app):
             try:
                 db.session.add(order)
                 db.session.commit()
-                flash("Order added successfully!", "success")
+                flash("Заказ успешно создан!", "success")
                 return redirect(url_for('view_orders'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         cars = Car.query.all()
         clients = Client.query.all()
@@ -62,11 +62,11 @@ def orders_routes(app):
 
             try:
                 db.session.commit()
-                flash("Order updated successfully!", "success")
+                flash("Заказ успешно обновлен!", "success")
                 return redirect(url_for('view_orders'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         cars = Car.query.all()
         clients = Client.query.all()
@@ -81,8 +81,8 @@ def orders_routes(app):
         try:
             db.session.delete(order)
             db.session.commit()
-            flash("Order deleted successfully!", "success")
+            flash("Данные заказа успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_orders'))
