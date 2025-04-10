@@ -1,142 +1,378 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить автомобиль</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css">
+    <title>Добавить автомобиль | Volkswagen ААА моторс</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary: #0058A3;
+            --primary-light: #E6F0F8;
+            --secondary: #FFCC00;
+            --dark: #1A1A1A;
+            --gray: #6B7280;
+            --light-gray: #F3F4F6;
+            --white: #FFFFFF;
+            --danger: #EF4444;
+            --success: #10B981;
+            --border-radius: 8px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #f7f7f7;
-            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", sans-serif;
-            color: #333;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark);
+            line-height: 1.5;
         }
+
         .container {
-            margin-top: 50px;
-            max-width: 600px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
-        .form-control {
-            border-radius: 15px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            background-color: #fff;
-        }
-        .btn {
-            border-radius: 15px;
-            padding: 12px 25px;
-            background-color: #007aff;
-            border: none;
-            color: #fff;
-            font-weight: bold;
-        }
-        .btn:hover {
-            background-color: #0061d5;
-        }
-        .alert {
-            border-radius: 10px;
-        }
+
+        /* Header */
         .header {
-            text-align: center;
-            margin-bottom: 30px;
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-        .card {
-            background-color: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .card-header {
-            background-color: #f0f0f5;
-            border-radius: 15px 15px 0 0;
-            font-size: 1.5rem;
-            color: #333;
-            font-weight: bold;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo img {
+            height: 36px;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            background-color: #004A8A;
+            transform: translateY(-1px);
+        }
+
+        /* Main content */
+        .main {
+            padding: 32px 0;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background-color: var(--light-gray);
+            color: var(--dark);
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background-color: #E5E7EB;
+        }
+
+        /* Form */
+        .form-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #D1D5DB;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: #004A8A;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #E5E7EB;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-danger {
+            background-color: #FEE2E2;
+            color: var(--danger);
+            border: 1px solid #FECACA;
+        }
+
+        .alert-success {
+            background-color: #D1FAE5;
+            color: var(--success);
+            border: 1px solid #A7F3D0;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            Добавить автомобиль
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Volkswagen_logo_2019.svg/1200px-Volkswagen_logo_2019.svg.png" alt="Volkswagen Logo">
+                <span class="logo-text">ААА моторс - Запад</span>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+            </a>
         </div>
-        <div class="card-body">
-            <!-- Выводим сообщения об успехе или ошибке -->
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">Добавить автомобиль</h1>
+                <a href="{{ url_for('view_cars') }}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Назад к списку
+                </a>
+            </div>
+
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    <ul class="list-unstyled">
-                        {% for category, message in messages %}
-                            <li class="alert alert-{{ category }}">
-                                {{ message }}
-                            </li>
-                        {% endfor %}
-                    </ul>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="make" class="form-label">Марка</label>
-                    <input type="text" class="form-control" id="make" name="make" required placeholder="Введите марку">
-                </div>
+            <div class="form-card">
+                <form method="POST" action="{{ url_for('add_car') }}">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="make">Марка</label>
+                            <input type="text" id="make" name="make" class="form-control" required>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="model" class="form-label">Модель</label>
-                    <input type="text" class="form-control" id="model" name="model" placeholder="Введите модель">
-                </div>
+                        <div class="form-group">
+                            <label for="model">Модель</label>
+                            <input type="text" id="model" name="model" class="form-control" required>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="year" class="form-label">Год</label>
-                    <input type="text" class="form-control" id="year" name="year" required placeholder="Введите год">
-                </div>
+                        <div class="form-group">
+                            <label for="year">Год выпуска</label>
+                            <input type="number" id="year" name="year" class="form-control" required min="1900" max="2099">
+                        </div>
 
-                <div class="mb-3">
-                    <label for="vin" class="form-label">VIN</label>
-                    <input type="text" class="form-control" id="vin" name="vin" required placeholder="Введите VIN">
-                </div>
+                        <div class="form-group">
+                            <label for="vin">VIN</label>
+                            <input type="text" id="vin" name="vin" class="form-control" required>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="color" class="form-label">Цвет</label>
-                    <input type="text" class="form-control" id="color" name="color" required placeholder="Введите цвет">
-                </div>
+                        <div class="form-group">
+                            <label for="color">Цвет</label>
+                            <input type="text" id="color" name="color" class="form-control" required>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="price" class="form-label">Цена</label>
-                    <input type="text" class="form-control" id="price" name="price" required placeholder="Введите цену">
-                </div>
+                        <div class="form-group">
+                            <label for="price">Цена (₽)</label>
+                            <input type="number" id="price" name="price" class="form-control" required min="0">
+                        </div>
 
-                <div class="mb-3">
-                    <label for="mileage" class="form-label">Пробег</label>
-                    <input type="text" class="form-control" id="mileage" name="mileage" required placeholder="Введите пробег">
-                </div>
+                        <div class="form-group">
+                            <label for="mileage">Пробег (км)</label>
+                            <input type="number" id="mileage" name="mileage" class="form-control" required min="0">
+                        </div>
 
-                <div class="mb-3">
-                    <label for="status" class="form-label">Статус</label>
-                    <input type="text" class="form-control" id="status" name="status" required placeholder="Введите статус">
-                </div>
+                        <div class="form-group">
+                            <label for="engine_volume">Объем двигателя (л)</label>
+                            <input type="number" step="0.1" id="engine_volume" name="engine_volume" class="form-control" required min="0">
+                        </div>
 
-                <div class="mb-3">
-                    <label for="fuel_type" class="form-label">Тип топлива</label>
-                    <input type="text" class="form-control" id="fuel_type" name="fuel_type" required placeholder="Введите тип топлива">
-                </div>
+                        <div class="form-group">
+                            <label for="status">Статус</label>
+                            <select id="status" name="status" class="form-control" required>
+                                <option value="available">В наличии</option>
+                                <option value="reserved">Резерв</option>
+                                <option value="sold">Продано</option>
+                            </select>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="transmission" class="form-label">Трансмиссия</label>
-                    <input type="text" class="form-control" id="transmission" name="transmission" required placeholder="Введите трансмиссию">
-                </div>
+                        <div class="form-group">
+                            <label for="fuel_type">Тип топлива</label>
+                            <select id="fuel_type" name="fuel_type" class="form-control" required>
+                                <option value="Бензин">Бензин</option>
+                                <option value="Дизель">Дизель</option>
+                                <option value="Гибрид">Гибрид</option>
+                                <option value="Электро">Электро</option>
+                                <option value="Газ">Газ</option>
+                            </select>
+                        </div>
 
-                <div class="mb-3">
-                    <label for="body_type" class="form-label">Тип кузова</label>
-                    <input type="text" class="form-control" id="body_type" name="body_type" required placeholder="Введите тип кузова">
-                </div>
+                        <div class="form-group">
+                            <label for="transmission">Коробка передач</label>
+                            <select id="transmission" name="transmission" class="form-control" required>
+                                <option value="Автомат">Автомат</option>
+                                <option value="Механика">Механика</option>
+                                <option value="Робот">Робот</option>
+                                <option value="Вариатор">Вариатор</option>
+                            </select>
+                        </div>
 
-                <button type="submit" class="btn btn-primary w-100">Добавить автомобиль</button>
-            </form>
+                        <div class="form-group">
+                            <label for="body_type">Тип кузова</label>
+                            <select id="body_type" name="body_type" class="form-control" required>
+                                <option value="Седан">Седан</option>
+                                <option value="Хэтчбек">Хэтчбек</option>
+                                <option value="Универсал">Универсал</option>
+                                <option value="Внедорожник">Внедорожник</option>
+                                <option value="Кроссовер">Кроссовер</option>
+                                <option value="Купе">Купе</option>
+                                <option value="Кабриолет">Кабриолет</option>
+                                <option value="Минивэн">Минивэн</option>
+                                <option value="Пикап">Пикап</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-undo"></i> Сбросить
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 </body>
 </html>
