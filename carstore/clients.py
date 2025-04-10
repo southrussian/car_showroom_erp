@@ -35,11 +35,11 @@ def clients_routes(app):
             try:
                 db.session.add(client)
                 db.session.commit()
-                flash("Client added successfully!", "success")
+                flash("Клиент успешно добавлен!", "success")
                 return redirect(url_for('view_clients'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         return render_template('add_client.html')
 
@@ -60,11 +60,11 @@ def clients_routes(app):
 
             try:
                 db.session.commit()
-                flash("Client updated successfully!", "success")
+                flash("Данные клиента успешно обновлены!", "success")
                 return redirect(url_for('view_clients'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         return render_template('edit_client.html', client=client)
 
@@ -78,8 +78,8 @@ def clients_routes(app):
         try:
             db.session.delete(client)
             db.session.commit()
-            flash("Client deleted successfully!", "success")
+            flash("Данные клиенты успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_clients'))
