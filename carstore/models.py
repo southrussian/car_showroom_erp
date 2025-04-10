@@ -40,6 +40,7 @@ class Car(db.Model):
     color = db.Column(db.String(20))
     price = db.Column(db.Float, nullable=False)
     mileage = db.Column(db.Integer)
+    engine_volume = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), nullable=False)
     fuel_type = db.Column(db.String(20))
     transmission = db.Column(db.String(20))

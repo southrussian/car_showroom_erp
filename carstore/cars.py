@@ -25,14 +25,15 @@ def cars_routes(app):
             color = request.form['color']
             price = request.form['price']
             mileage = request.form['mileage']
+            engine_volume = request.form['engine_volume']
             status = request.form['status']
             fuel_type = request.form['fuel_type']
             transmission = request.form['transmission']
             body_type = request.form['body_type']
 
             car = Car(make=make, model=model, year=year, vin=vin, color=color, price=price,
-                      mileage=mileage, status=status, fuel_type=fuel_type, transmission=transmission,
-                      body_type=body_type)
+                      mileage=mileage, engine_volume=engine_volume, status=status, fuel_type=fuel_type,
+                      transmission=transmission, body_type=body_type)
 
             try:
                 db.session.add(car)
@@ -60,6 +61,7 @@ def cars_routes(app):
             car.color = request.form['color']
             car.price = request.form['price']
             car.mileage = request.form['mileage']
+            car.engine_volume = request.form['engine_volume']
             car.status = request.form['status']
             car.fuel_type = request.form['fuel_type']
             car.transmission = request.form['transmission']
