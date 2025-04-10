@@ -42,11 +42,11 @@ def test_drives_routes(app):
             try:
                 db.session.add(test_drive)
                 db.session.commit()
-                flash("Test drive added successfully!", "success")
+                flash("Тест-драйв успешно добавлен!", "success")
                 return redirect(url_for('view_test_drives'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         clients = Client.query.all()
         cars = Car.query.all()
@@ -74,11 +74,11 @@ def test_drives_routes(app):
 
             try:
                 db.session.commit()
-                flash("Test drive updated successfully!", "success")
+                flash("Данные тест-драйва обновлены успешно!", "success")
                 return redirect(url_for('view_test_drives'))
             except Exception as e:
                 db.session.rollback()
-                flash(f"An error occurred: {e}", "danger")
+                flash(f"Возникла ошибка: {e}", "danger")
 
         clients = Client.query.all()
         cars = Car.query.all()
@@ -102,5 +102,5 @@ def test_drives_routes(app):
             flash("Данные тест-драйва успешно удалены!", "success")
         except Exception as e:
             db.session.rollback()
-            flash(f"An error occurred: {e}", "danger")
+            flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_test_drives'))
