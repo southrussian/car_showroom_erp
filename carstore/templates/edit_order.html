@@ -316,9 +316,9 @@
                         <div class="form-group">
                             <label for="status">Статус</label>
                             <select id="status" name="status" class="form-control" required>
-                                <option value="new" {% if order.status == 'В обработке' %}selected{% endif %}>В обработке</option>
-                                <option value="processing" {% if order.status == 'Доставлен' %}selected{% endif %}>Доставлен</option>
-                                <option value="completed" {% if order.status == 'В пути' %}selected{% endif %}>В пути</option>
+                                <option value="new" {% if order.status == 'Забронирована' %}selected{% endif %}>Забронирована</option>
+                                <option value="processing" {% if order.status == 'Оплачен' %}selected{% endif %}>Оплачен</option>
+                                <option value="completed" {% if order.status == 'Завершен' %}selected{% endif %}>Завершен</option>
                             </select>
                         </div>
                     </div>

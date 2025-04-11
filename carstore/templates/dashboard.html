@@ -306,8 +306,8 @@
                         <h3>Клиенты</h3>
                     </div>
                     <div class="card-body">
-                        <div class="card-stats">1,248</div>
-                        <div class="card-description">+12 за неделю</div>
+                        <div class="card-stats">{{ clients_count }} клиентов</div>
+                        <div class="card-description">в базе</div>
                     </div>
                 </div>
 
@@ -317,8 +317,8 @@
                         <h3>Автомобили</h3>
                     </div>
                     <div class="card-body">
-                        <div class="card-stats">84</div>
-                        <div class="card-description">5 новых поступлений</div>
+                        <div class="card-stats">{{ cars_count }} авто</div>
+                        <div class="card-description">в базе</div>
                     </div>
                 </div>
 
@@ -328,7 +328,7 @@
                         <h3>Продажи</h3>
                     </div>
                     <div class="card-body">
-                        <div class="card-stats">32</div>
+                        <div class="card-stats">{{ sales_count }}</div>
                         <div class="card-description">в этом месяце</div>
                     </div>
                 </div>
@@ -339,7 +339,7 @@
                         <h3>Сервис</h3>
                     </div>
                     <div class="card-body">
-                        <div class="card-stats">18</div>
+                        <div class="card-stats">{{ services_count }}</div>
                         <div class="card-description">текущих заявок</div>
                     </div>
                 </div>
@@ -388,6 +388,10 @@
                     <a href="{{ url_for('view_service_requests') }}" class="action-button">
                         <i class="fas fa-message"></i>
                         <span>Заявки на обслуживание</span>
+                    </a>
+                    <a href="{{ url_for('predict_price') }}" class="action-button">
+                        <i class="fas fa-line-chart"></i>
+                        <span>Расчет стоимости</span>
                     </a>
                 </div>
             </div>

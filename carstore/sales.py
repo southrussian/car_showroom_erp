@@ -88,3 +88,48 @@ def sales_routes(app):
             db.session.rollback()
             flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_sales'))
+
+    # sales.py (добавления)
+    @app.route('/create_sale_from_order/<int:order_id>', methods=['GET', 'POST'])
+    def create_sale_from_order(order_id):
+        if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
+            return redirect(url_for('login'))
+
+        order = Order.query.get_or_404(order_id)
+        if order.status != 'Оплачен':
+            flash('Можно создать продажу только для оплаченных заказов.', 'danger')
+            return redirect(url_for('view_orders'))
+
+        car = Car.query.get(order.car_id)
+        if car.status == 'Продана':
+            flash('Этот автомобиль уже продан.', 'danger')
+            return redirect(url_for('view_orders'))
+
+        if request.method == 'POST':
+            sale_price = float(request.form['sale_price'])
+            salesperson_id = request.form['salesperson_id']
+            payment_method = request.form.get('payment_method')
+
+            # Создаем продажу
+            sale = Sale(
+                order_id=order_id,
+                sale_price=sale_price,
+                salesperson_id=salesperson_id,
+                payment_method=payment_method
+            )
+
+            try:
+                # Обновляем статус заказа и автомобиля
+                order.status = 'Завершен'
+                car.status = 'Продана'
+                db.session.add(sale)
+                db.session.commit()
+                flash("Продажа успешно оформлена!", "success")
+                return redirect(url_for('view_sales'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Возникла ошибка: {e}", "danger")
+
+        employees = Employee.query.all()
+        return render_template('create_sale.html', order=order, car=car, employees=employees)

@@ -1,8 +1,35 @@
 from models import *
 from flask import render_template, redirect, url_for, flash, request, session
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from datetime import datetime
+
+
+current_year = datetime.now().year
+
+
+def train_model():
+    cars = Car.query.all()
+    data = [(car.year, car.engine_volume, car.mileage, car.price) for car in cars]
+    df = pd.DataFrame(data, columns=['year', 'engine_volume', 'mileage', 'price'])
+
+    X = df[['year', 'engine_volume', 'mileage']]
+    y = df['price']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    return model
 
 
 def cars_routes(app):
+    with app.app_context():
+        model = train_model()
+
     @app.route('/view_cars')
     def view_cars():
         if 'user_id' not in session:
@@ -39,7 +66,7 @@ def cars_routes(app):
                 db.session.add(car)
                 db.session.commit()
                 flash("Автомобиль успешно добавлен!", "success")
-                return redirect(url_for('view_patients'))
+                return redirect(url_for('view_cars'))
             except Exception as e:
                 db.session.rollback()
                 flash(f"Возникла ошибка: {e}", "danger")
@@ -70,7 +97,7 @@ def cars_routes(app):
             try:
                 db.session.commit()
                 flash("Информация об автомобиле успешно обновлена!", "success")
-                return redirect(url_for('view_patients'))
+                return redirect(url_for('view_cars'))
             except Exception as e:
                 db.session.rollback()
                 flash(f"Возникла ошибка: {e}", "danger")
@@ -91,3 +118,35 @@ def cars_routes(app):
             db.session.rollback()
             flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_cars'))
+
+    @app.route('/predict_price', methods=['GET', 'POST'])
+    def predict_price():
+        if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
+            return redirect(url_for('login'))
+
+        prediction = None
+        form_data = {}
+
+        if request.method == 'POST':
+            try:
+                form_data = {
+                    'year': int(request.form['year']),
+                    'engine_volume': float(request.form['engine_volume']),
+                    'mileage': int(request.form['mileage'])
+                }
+
+                input_data = np.array([[form_data['year'], form_data['engine_volume'], form_data['mileage']]])
+                predicted_price = model.predict(input_data)[0]
+
+                if form_data['mileage'] < 100000 and form_data['year'] > 2015:
+                    predicted_price *= 1.1
+
+                prediction = round(predicted_price, 2)
+
+            except Exception as e:
+                flash(f"Ошибка при расчете стоимости: {str(e)}", "danger")
+
+        return render_template('predict_price.html',
+                               prediction=prediction,
+                               form_data=form_data)

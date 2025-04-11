@@ -86,3 +86,63 @@ def orders_routes(app):
             db.session.rollback()
             flash(f"Возникла ошибка: {e}", "danger")
         return redirect(url_for('view_orders'))
+
+    @app.route('/reserve_car/<int:car_id>', methods=['GET', 'POST'])
+    def reserve_car(car_id):
+        if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
+            return redirect(url_for('login'))
+
+        car = Car.query.get_or_404(car_id)
+        if car.status == 'Продана':
+            flash('Этот автомобиль уже продан и не может быть забронирован.', 'danger')
+            return redirect(url_for('view_cars'))
+
+        if request.method == 'POST':
+            client_id = request.form['client_id']
+            expected_delivery_date = request.form['expected_delivery_date']
+
+            # Создаем заказ со статусом "Забронирована"
+            order = Order(
+                car_id=car_id,
+                client_id=client_id,
+                expected_delivery_date=datetime.strptime(expected_delivery_date,
+                                                         '%Y-%m-%d').date() if expected_delivery_date else None,
+                status='Забронирована'
+            )
+
+            try:
+                # Обновляем статус автомобиля
+                car.status = 'Забронирована'
+                db.session.add(order)
+                db.session.commit()
+                flash("Автомобиль успешно забронирован!", "success")
+                return redirect(url_for('view_orders'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f"Возникла ошибка: {e}", "danger")
+
+        clients = Client.query.all()
+        return render_template('reserve_car.html', car=car, clients=clients)
+
+    @app.route('/complete_order/<int:order_id>', methods=['POST'])
+    def complete_order(order_id):
+        if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
+            return redirect(url_for('login'))
+
+        order = Order.query.get_or_404(order_id)
+        if order.status != 'Забронирована':
+            flash('Можно завершать только забронированные заказы.', 'danger')
+            return redirect(url_for('view_orders'))
+
+        try:
+            # Обновляем статус заказа
+            order.status = 'Оплачен'
+            db.session.commit()
+            flash("Заказ успешно оплачен!", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Возникла ошибка: {e}", "danger")
+
+        return redirect(url_for('view_orders'))

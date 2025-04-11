@@ -3,7 +3,9 @@ import logging
 from logging.handlers import RotatingFileHandler
 from routes import register_routes
 from flask_migrate import Migrate
-from models import db
+from models import *
+from datetime import datetime
+from sqlalchemy import extract
 
 
 app = Flask(__name__)
@@ -31,8 +33,27 @@ def dashboard():
         app.logger.warning("Попытка доступа к панели управления без аутентификации.")
         flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
         return redirect(url_for('login'))
+
     app.logger.info(f"Доступ к панели управления пользователем ID: {session['user_id']}.")
-    return render_template('dashboard.html')
+
+    # Общая статистика
+    total_clients = Client.query.count()
+    total_cars = Car.query.count()
+    active_services = Service.query.filter_by(status='В процессе').count()
+
+    current_month = datetime.now().month
+    monthly_sales = Sale.query.filter(
+        extract('month', Sale.sale_date) == current_month
+    ).count()
+
+    return render_template(
+        'dashboard.html',
+        # Основные данные
+        clients_count=total_clients,
+        cars_count=total_cars,
+        sales_count=monthly_sales,
+        services_count=active_services,
+    )
 
 
 @app.errorhandler(404)

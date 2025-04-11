@@ -9,10 +9,24 @@ def employees_routes(app):
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
 
-        employees = Employee.query.options(
-            db.joinedload(Employee.user)
-        ).all()
-        return render_template('view_employees.html', employees=employees)
+        sort_order = request.args.get('sort', 'asc')
+        search_query = request.args.get('search', '').strip()
+        employees_query = Employee.query
+
+        if search_query:
+            employees_query = employees_query.filter(
+                (Employee.last_name.ilike(f'%{search_query}%')) |
+                (Employee.first_name.ilike(f'%{search_query}%'))
+            )
+
+        if sort_order == 'asc':
+            employees_query = employees_query.order_by(Employee.last_name.asc())
+        else:
+            employees_query = employees_query.order_by(Employee.last_name.desc())
+
+        employees = employees_query.all()
+        return render_template('view_employees.html', employees=employees,
+                               search_query=search_query, sort_order=sort_order)
 
     @app.route('/add_employee', methods=['GET', 'POST'])
     def add_employee():
