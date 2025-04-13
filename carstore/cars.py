@@ -15,20 +15,20 @@ def train_model():
     data = [(car.year, car.engine_volume, car.mileage, car.price) for car in cars]
     df = pd.DataFrame(data, columns=['year', 'engine_volume', 'mileage', 'price'])
 
-    X = df[['year', 'engine_volume', 'mileage']]
+    x = df[['year', 'engine_volume', 'mileage']]
     y = df['price']
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
-    model = LinearRegression()
-    model.fit(X_train, y_train)
+    lr = LinearRegression()
+    lr.fit(x_train, y_train)
 
-    return model
+    return lr
 
 
 def cars_routes(app):
     with app.app_context():
-        model = train_model()
+        lr = train_model()
 
     @app.route('/view_cars')
     def view_cars():
@@ -137,7 +137,7 @@ def cars_routes(app):
                 }
 
                 input_data = np.array([[form_data['year'], form_data['engine_volume'], form_data['mileage']]])
-                predicted_price = model.predict(input_data)[0]
+                predicted_price = lr.predict(input_data)[0]
 
                 if form_data['mileage'] < 100000 and form_data['year'] > 2015:
                     predicted_price *= 1.1
