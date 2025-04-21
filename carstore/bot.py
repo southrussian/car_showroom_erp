@@ -22,10 +22,26 @@ def get_cars():
     """Функция для получения списка автомобилей из базы данных."""
     conn = sqlite3.connect(DATABASE)
     cursor = conn.cursor()
-    cursor.execute("SELECT make, model, status, price FROM cars")
+    cursor.execute("SELECT make, model, status, price FROM cars WHERE status = 'В наличии'")
     cars = cursor.fetchall()
     conn.close()
     return cars
+
+
+def get_orders():
+    """Функция для получения списка автомобилей из базы данных."""
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT cars.make, cars.model, orders.status, clients.first_name, clients.last_name, orders.expected_delivery_date
+        FROM cars
+        JOIN orders ON cars.car_id = orders.car_id
+        JOIN clients ON orders.client_id = clients.client_id
+        WHERE orders.status != 'Завершен'
+    """)
+    orders = cursor.fetchall()
+    conn.close()
+    return orders
 
 
 @dp.message(Command('start'))
@@ -56,6 +72,21 @@ async def cars_handler(message: types.Message):
         response = "Автомобили не найдены."
     await message.reply(response)
     logger.info(f"Bot sent list of {len(cars)} cars")
+
+
+@dp.message(Command('orders'))
+async def orders_handler(message: types.Message):
+    """Обработчик команды /orders для вывода списка заказов."""
+    logger.info(f"User {message.from_user.id} ({message.from_user.username}) used /orders")
+    orders = get_orders()
+    if orders:
+        response = "Список заказов:\n\n"
+        for order in orders:
+            response += f"Автомобиль {order[0]} {order[1]} | Статус: {order[2]} | Для клиента: {order[3]} {order[4]} | Ожидаемая дата доставки: {order[5]}\n\n"
+    else:
+        response = "Автомобили не найдены."
+    await message.reply(response)
+    logger.info(f"Bot sent list of {len(orders)} cars")
 
 
 @dp.message()

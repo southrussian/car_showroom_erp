@@ -248,6 +248,61 @@
             font-weight: 500;
         }
 
+        /* Telegram bot card */
+        .telegram-card {
+            grid-column: span 2;
+            background-color: #0088CC;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .telegram-card .card-header {
+            background-color: rgba(0, 0, 0, 0.1);
+            color: white;
+        }
+
+        .telegram-card .card-header i {
+            color: white;
+        }
+
+        .telegram-card .card-header h3 {
+            color: white;
+        }
+
+        .telegram-card .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .telegram-card .card-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+        }
+
+        .telegram-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background-color: white;
+            color: #0088CC;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .telegram-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .telegram-button i {
+            font-size: 20px;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .dashboard-grid {
@@ -256,6 +311,10 @@
 
             .actions-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+
+            .telegram-card {
+                grid-column: span 2;
             }
         }
 
@@ -272,6 +331,10 @@
                 flex-direction: column;
                 gap: 12px;
             }
+
+            .telegram-card {
+                grid-column: span 1;
+            }
         }
     </style>
 </head>
@@ -283,10 +346,10 @@
                     <span class="logo-text">Япония-Моторс</span>
                 </a>
             </div>
-            <a href="{{ url_for('logout') }}" >
+            <a href="{{ url_for('logout') }}">
                 <p class="dashboard-subtitle">Выйти</p>
             </a>
-            </div>
+        </div>
     </header>
 
     <main class="main">
@@ -341,6 +404,24 @@
                     <div class="card-body">
                         <div class="card-stats">{{ services_count }}</div>
                         <div class="card-description">текущих заявок</div>
+                    </div>
+                </div>
+
+                <!-- Telegram Bot Card -->
+                <div class="card telegram-card">
+                    <div class="card-header">
+                        <i class="fab fa-telegram"></i>
+                        <h3>Telegram Бот</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-stats">Интеллектуальный помощник</div>
+                        <div class="card-description">
+                            Наш Telegram-бот позволяет получать всю необходимую информацию об автомобилях
+                        </div>
+                        <a href="https://t.me/carshowroom_bolshenko_bot" target="_blank" class="telegram-button">
+                            <i class="fab fa-telegram"></i>
+                            <span>Подробнее</span>
+                        </a>
                     </div>
                 </div>
             </div>
