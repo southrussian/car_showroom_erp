@@ -23,8 +23,10 @@ def yandex(prompt: str) -> str:
     messages = [
         {
             "role": "system",
-            "text": "Ты - полезный ассистент автосалона. Отвечай вежливо и по делу, характеристики моделей "
-                    "указывай максимально точно"
+            "text": """Ты - полезный ассистент автосалона. 
+            Отвечай вежливо и по делу, характеристики запрашиваемых моделей автомобилей указывай точно. 
+            Не допускай использование формулировок 'Лучше обратитесь к кому-то...' или '...зависит от модификации...' 
+            """
         },
         {
             "role": "user",
@@ -33,7 +35,7 @@ def yandex(prompt: str) -> str:
     ]
 
     result = (
-        sdk.models.completions("yandexgpt").configure(temperature=0.1).run(messages)
+        sdk.models.completions("yandexgpt").configure(temperature=0.3).run(messages)
     )
 
     for alternative in result:

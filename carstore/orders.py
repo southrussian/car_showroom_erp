@@ -102,7 +102,6 @@ def orders_routes(app):
             client_id = request.form['client_id']
             expected_delivery_date = request.form['expected_delivery_date']
 
-            # Создаем заказ со статусом "Забронирована"
             order = Order(
                 car_id=car_id,
                 client_id=client_id,

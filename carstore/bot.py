@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from yandexgpt import yandex
 from logger import logger
 
+
 load_dotenv()
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -64,11 +65,10 @@ async def handle_message(message: types.Message):
         user_info = f"{message.from_user.id} ({message.from_user.username})"
         logger.info(f"Message from {user_info}: {message.text}")
 
-        # Получаем ответ от YandexGPT
         response = yandex(message.text)
 
         await message.reply(response)
-        logger.info(f"Bot replied to {user_info}: {response[:50]}...")  # Логируем первые 50 символов ответа
+        logger.info(f"Bot replied to {user_info}: {response[:50]}...")
     except Exception as e:
         error_msg = f"Error processing message: {str(e)}"
         logger.error(error_msg)
