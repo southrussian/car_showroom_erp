@@ -341,7 +341,7 @@
                     </thead>
                     <tbody>
                         {% for car in cars %}
-                        <tr>
+                        <tr onclick="window.location='{{ url_for('car_details', car_id=car.car_id) }}'" style="cursor: pointer;">
                             <td>
                                 <div style="display: flex; align-items: center; gap: 15px;">
                                     {% if car.image_path %}

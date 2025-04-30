@@ -53,6 +53,15 @@ def cars_routes(app):
         cars = Car.query.all()
         return render_template('view_cars.html', cars=cars)
 
+    @app.route('/car_details/<int:car_id>')
+    def car_details(car_id):
+        if 'user_id' not in session:
+            flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
+            return redirect(url_for('login'))
+
+        car = Car.query.get_or_404(car_id)
+        return render_template('car_details.html', car=car)
+
     @app.route('/add_car', methods=['GET', 'POST'])
     def add_car():
         if 'user_id' not in session:
@@ -147,8 +156,15 @@ def cars_routes(app):
         if 'user_id' not in session:
             flash('Пожалуйста, войдите для доступа к этой странице.', 'warning')
             return redirect(url_for('login'))
+
         car = Car.query.get_or_404(car_id)
         try:
+            # Удаляем изображение, если оно есть
+            if car.image_path:
+                image_path = os.path.join('static', car.image_path)
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+
             db.session.delete(car)
             db.session.commit()
             flash("Информация об автомобиле удалена!", "success")
