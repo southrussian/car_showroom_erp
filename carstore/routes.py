@@ -1,4 +1,4 @@
-from cars import cars_routes
+from cars import cars_routes, image_routes
 from clients import clients_routes
 from consultations import consultations_routes
 from employees import employees_routes
@@ -23,3 +23,4 @@ def register_routes(app):
     services_routes(app)
     test_drives_routes(app)
     user_routes(app)
+    image_routes(app)

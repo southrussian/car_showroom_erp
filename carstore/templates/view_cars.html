@@ -343,9 +343,20 @@
                         {% for car in cars %}
                         <tr>
                             <td>
-                                <div class="car-title">{{ car.make }} {{ car.model }}</div>
-                                <div class="car-details">{{ car.color }}, {{ car.body_type }}</div>
-                                <div class="car-details">VIN: {{ car.vin }}</div>
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    {% if car.image_path %}
+                                    <img src="{{ url_for('static', filename=car.image_path) }}" class="car-image" style="width: 100px; height: 75px; object-fit: cover;">
+                                    {% else %}
+                                    <div class="car-image" style="width: 100px; height: 75px; background: #eee; display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas fa-car" style="font-size: 24px; color: #999;"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <div class="car-title">{{ car.make }} {{ car.model }}</div>
+                                        <div class="car-details">{{ car.color }}, {{ car.body_type }}</div>
+                                        <div class="car-details">VIN: {{ car.vin }}</div>
+                                    </div>
+                                </div>
                             </td>
                             <td>{{ car.year }}</td>
                             <td>{{ car.mileage }} км</td>

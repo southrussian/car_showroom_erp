@@ -45,6 +45,7 @@ class Car(db.Model):
     fuel_type = db.Column(db.String(20))
     transmission = db.Column(db.String(20))
     body_type = db.Column(db.String(20))
+    image_path = db.Column(db.String(255))
 
 
 class Order(db.Model):

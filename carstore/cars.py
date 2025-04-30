@@ -5,9 +5,24 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 
 current_year = datetime.now().year
+
+UPLOAD_FOLDER = 'static/uploads/cars'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def image_routes(app):
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
 def train_model():
@@ -58,9 +73,17 @@ def cars_routes(app):
             transmission = request.form['transmission']
             body_type = request.form['body_type']
 
+            image_path = None
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(f"{vin}_{file.filename}")
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    image_path = os.path.join('uploads/cars', filename)
+
             car = Car(make=make, model=model, year=year, vin=vin, color=color, price=price,
                       mileage=mileage, engine_volume=engine_volume, status=status, fuel_type=fuel_type,
-                      transmission=transmission, body_type=body_type)
+                      transmission=transmission, body_type=body_type, image_path=image_path)
 
             try:
                 db.session.add(car)
@@ -93,6 +116,21 @@ def cars_routes(app):
             car.fuel_type = request.form['fuel_type']
             car.transmission = request.form['transmission']
             car.body_type = request.form['body_type']
+
+            # Обработка загрузки нового изображения
+            if 'image' in request.files:
+                file = request.files['image']
+                if file and allowed_file(file.filename):
+                    # Удаляем старое изображение, если оно есть
+                    if car.image_path:
+                        old_image = os.path.join('static', car.image_path)
+                        if os.path.exists(old_image):
+                            os.remove(old_image)
+
+                    # Сохраняем новое изображение
+                    filename = secure_filename(f"{car.vin}_{file.filename}")
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    car.image_path = os.path.join('uploads/cars', filename)
 
             try:
                 db.session.commit()

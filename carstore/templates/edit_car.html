@@ -74,7 +74,7 @@
                 {% endif %}
             {% endwith %}
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="make" class="form-label">Марка</label>
                     <input type="text" class="form-control" id="make" name="make" required value="{{ car.make }}">
@@ -129,6 +129,25 @@
                     <label for="body_type" class="form-label">Тип кузова</label>
                     <input type="text" class="form-control" id="body_type" name="body_type" required value="{{ car.body_type }}">
                 </div>
+
+                <div class="mb-3">
+                    <label for="engine_volume" class="form-label">Объем двигателя</label>
+                    <input type="number" step="0.1" class="form-control" id="engine_volume" name="engine_volume" required value="{{ car.engine_volume }}">
+                </div>
+
+
+                <!-- Добавим после блока с типом кузова -->
+                <div class="mb-3">
+                    <label for="image" class="form-label">Изображение автомобиля</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    {% if car.image_path %}
+                    <div class="mt-2">
+                        <small>Текущее изображение:</small>
+                        <img src="{{ url_for('static', filename=car.image_path) }}" class="img-thumbnail mt-2" style="max-width: 200px;">
+                    </div>
+                    {% endif %}
+                </div>
+
 
                 <button type="submit" class="btn btn-primary w-100">Сохранить изменения</button>
             </form>
