@@ -316,8 +316,8 @@
                         <div class="form-group">
                             <label for="payment_method">Способ оплаты</label>
                             <select id="payment_method" name="payment_method" class="form-control" required>
-                                <option value="cash" {% if sale.payment_method == 'Наличные' %}selected{% endif %}>Наличные</option>
-                                <option value="credit" {% if sale.payment_method == 'Карта' %}selected{% endif %}>Карта</option>
+                                <option value="Наличные" {% if sale.payment_method == 'Наличные' %}selected{% endif %}>Наличные</option>
+                                <option value="Карта" {% if sale.payment_method == 'Карта' %}selected{% endif %}>Карта</option>
                             </select>
                         </div>
                     </div>
