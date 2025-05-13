@@ -272,7 +272,7 @@
                             <label for="user_id">Пользователь</label>
                             <select id="user_id" name="user_id" class="form-control" required>
                                 {% for user in users %}
-                                    <option value="{{ user.id }}" {% if user.id == employee.user_id %}selected{% endif %}>
+                                    <option value="{{ user.user_id }}" {% if user.user_id == employee.user_id %}selected{% endif %}>
                                         {{ user.username }}
                                     </option>
                                 {% endfor %}

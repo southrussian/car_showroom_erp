@@ -91,7 +91,7 @@ async def orders_handler(message: types.Message):
 
 @dp.message()
 async def handle_message(message: types.Message):
-    """Обработчик всех текстовых сообщений, не являющихся командами."""
+    """Обработчик всех текстовых сообщений"""
     try:
         user_info = f"{message.from_user.id} ({message.from_user.username})"
         logger.info(f"Message from {user_info}: {message.text}")

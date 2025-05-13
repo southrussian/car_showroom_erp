@@ -11,7 +11,7 @@ from sqlalchemy import extract
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autosalon.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'oxxxymiron'
+app.secret_key = 'bolshenko'
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s - %(message)s')
 file_handler = RotatingFileHandler('autosalon.log', maxBytes=10 * 1024 * 1024, backupCount=5)
@@ -38,7 +38,7 @@ def dashboard():
 
     # Общая статистика
     total_clients = Client.query.count()
-    total_cars = Car.query.count()
+    total_cars = Car.query.filter_by(status='В наличии').count()
     active_services = Service.query.filter_by(status='В процессе').count()
 
     current_month = datetime.now().month
