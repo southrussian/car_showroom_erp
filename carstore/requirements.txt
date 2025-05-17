@@ -1,0 +1,13 @@
+flask
+aiogram
+asyncio
+python-dotenv
+flask_migrate
+sqlalchemy
+numpy
+pandas
+scikit-learn
+yandex_cloud_ml_sdk
+werkzeug
+flask_sqlalchemy
+virtualenv
