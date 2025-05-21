@@ -689,3 +689,20 @@
 [2025-05-13 15:43:45,544] INFO - Приложение запущено.
 [2025-05-13 15:43:45,619] INFO - База данных инициализирована.
 [2025-05-13 15:43:45,619] INFO - Приложение запущено в режиме отладки.
+[2025-05-21 15:37:25,762] INFO - Приложение запущено.
+[2025-05-21 15:37:25,830] INFO - База данных инициализирована.
+[2025-05-21 15:37:25,831] INFO - Приложение запущено в режиме отладки.
+[2025-05-21 15:37:26,579] INFO - Приложение запущено.
+[2025-05-21 15:37:26,632] INFO - База данных инициализирована.
+[2025-05-21 15:37:26,632] INFO - Приложение запущено в режиме отладки.
+[2025-05-21 15:37:40,690] WARNING - Попытка доступа к панели управления без аутентификации.
+[2025-05-21 15:37:40,814] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:37:44,811] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:37:54,784] INFO - Доступ к панели управления пользователем ID: 1.
+[2025-05-21 15:37:55,307] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:38:39,399] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:38:41,965] INFO - Доступ к панели управления пользователем ID: 1.
+[2025-05-21 15:38:42,097] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:38:45,948] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:38:57,177] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+[2025-05-21 15:39:04,968] ERROR - Страница не найдена: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
